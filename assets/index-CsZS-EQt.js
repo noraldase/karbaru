@@ -212,7 +212,7 @@ function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setSh
             // PERUBAHAN 3: Logika Kondisional (!isPopupActive &&)
             // Tombol hanya akan muncul jika TIDAK ADA popup yang aktif
             !isPopupActive && D.jsx("a", {
-                href: "https://www.neoparty.web.id",
+                href: "https://www.topup.neoparty.web.id",
                 target: "_blank",
                 className: "w-full mb-4 py-3 bg-[#FFD700] text-[#064B7F] font-black rounded-2xl text-center shadow-xl block z-20 border-2 border-[#FD7100]",
                 style: {
@@ -223,7 +223,7 @@ function Uv(){const{orderInfo:i,paymentForProduct:f,setShowDetailPesanan:s,setSh
                     fontWeight: "900",
                     textDecoration: "none"
                 },
-                children: "BONGKAR KLIK DISINI"
+                children: "TOPUP KLIK DISINI"
             }),
             
             D.jsxs("div", {
