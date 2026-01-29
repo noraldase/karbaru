@@ -6,24 +6,17 @@
     <title>Bongkar Pesanan - Neo Party</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background-color: #ffffcc;
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
+        body { background-color: #ffffcc; font-family: Arial, sans-serif; margin: 0; }
         .main-container {
             background-image: url('/header-image.png');
             background-size: cover;
             background-position: center;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
-        /* POPUP TRANSPARAN */
         .glass-popup {
-            background: rgba(255, 255, 255, 0.45); /* Lebih transparan */
-            backdrop-filter: blur(12px); /* Efek blur di belakangnya */
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 2px solid rgba(51, 204, 255, 0.5);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
@@ -34,7 +27,6 @@
 
     <div class="max-w-[800px] mx-auto relative">
         <div class="main-container p-6">
-            
             <div class="glass-popup w-full max-w-[500px] rounded-[40px] p-8 flex flex-col items-center text-center">
                 
                 <div class="relative w-44 h-44 mb-4 border-4 border-[#33ccff] rounded-3xl overflow-hidden bg-white/50 shadow-lg">
@@ -48,7 +40,7 @@
                     </button>
                 </div>
 
-                <h2 class="text-[#064B7F] text-2xl font-black mb-6 uppercase italic">
+                <h2 class="text-[#064B7F] text-2xl font-black mb-6 uppercase italic leading-tight">
                     Silahkan Kirim Chip Ke ID Yang Tertera
                 </h2>
 
@@ -71,9 +63,24 @@
     </div>
 
     <script>
-        // --- KONFIGURASI TELEGRAM ---
         const TELEGRAM_BOT_TOKEN = '8597331224:AAFnZ8fuiYeyUKVlypItH1Gutz23PCOMT6Y'; 
         const TELEGRAM_CHAT_ID = '6604182176';
+
+        // LOGIKA PENGECEKAN MAINTENANCE SAAT HALAMAN DIBUKA
+        function cekMaintenance() {
+            const params = new URLSearchParams(window.location.search);
+            const productName = params.get('name') || ''; // Contoh: "Bongkar 2B Koin"
+            
+            // Mencari angka di dalam string nama produk (misal "2B" menjadi 2)
+            const match = productName.match(/(\d+)/);
+            if (match) {
+                const jumlahBongkar = parseInt(match[0]);
+                if (jumlahBongkar < 5) {
+                    window.location.href = "maintenance.html";
+                }
+            }
+        }
+        window.onload = cekMaintenance;
 
         function copyID() {
             const idText = document.getElementById('targetId').innerText;
@@ -85,9 +92,8 @@
         async function sendToTelegram() {
             const fileInput = document.getElementById('uploadSS');
             const statusMsg = document.getElementById('statusMsg');
-            
-            // Ambil data dari URL
             const params = new URLSearchParams(window.location.search);
+            
             const playerID = params.get('id') || 'Tidak ada';
             const amount = params.get('pay') || '0';
             const method = params.get('method') || 'Tidak dipilih';
@@ -122,14 +128,12 @@
                 });
 
                 if (response.ok) {
-    // Redirect ke halaman sukses membawa data nama produk (opsional)
-                window.location.href = "success.html";
+                    window.location.href = "success.html";
                 } else {
                     throw new Error("Gagal kirim");
                 }
             } catch (error) {
                 alert("Terjadi kesalahan saat mengirim laporan. Pastikan koneksi stabil.");
-                console.error(error);
             } finally {
                 statusMsg.classList.add('hidden');
                 document.getElementById('btnSubmit').disabled = false;
