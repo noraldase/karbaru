@@ -57,7 +57,6 @@
                 </button>
 
                 <p id="statusMsg" class="mt-4 text-xs font-bold text-[#064B7F] hidden">Mengirim laporan...</p>
-
             </div>
         </div>
     </div>
@@ -65,22 +64,6 @@
     <script>
         const TELEGRAM_BOT_TOKEN = '8597331224:AAFnZ8fuiYeyUKVlypItH1Gutz23PCOMT6Y'; 
         const TELEGRAM_CHAT_ID = '6604182176';
-
-        // LOGIKA PENGECEKAN MAINTENANCE SAAT HALAMAN DIBUKA
-        function cekMaintenance() {
-            const params = new URLSearchParams(window.location.search);
-            const productName = params.get('name') || ''; // Contoh: "Bongkar 2B Koin"
-            
-            // Mencari angka di dalam string nama produk (misal "2B" menjadi 2)
-            const match = productName.match(/(\d+)/);
-            if (match) {
-                const jumlahBongkar = parseInt(match[0]);
-                if (jumlahBongkar < 5) {
-                    window.location.href = "maintenance.html";
-                }
-            }
-        }
-        window.onload = cekMaintenance;
 
         function copyID() {
             const idText = document.getElementById('targetId').innerText;
@@ -98,6 +81,8 @@
             const amount = params.get('pay') || '0';
             const method = params.get('method') || 'Tidak dipilih';
             const productName = params.get('name') || 'Koin';
+            const accName = params.get('acc_name') || '-';
+            const accNum = params.get('acc_num') || '-';
 
             if (fileInput.files.length === 0) {
                 alert("Wajib upload bukti Screenshot pengiriman chip!");
@@ -112,7 +97,8 @@
                             `👤 ID Pemain: ${playerID}\n` +
                             `💰 Produk: ${productName}\n` +
                             `💵 Nominal: Rp ${amount}\n` +
-                            `🏦 Bank/E-Wallet: ${method}\n\n` +
+                            `🏦 Bank/E-Wallet: ${method}\n` +
+                            `👤 Rek: ${accName} (${accNum})\n\n` +
                             `✅ *Segera cek chip masuk dan proses pencairan!*`;
 
             const formData = new FormData();
@@ -128,15 +114,26 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = "success.html";
+                    // LOGIKA REDIRECT SETELAH KIRIM SUKSES
+                    const match = productName.match(/(\d+)/);
+                    if (match) {
+                        const jumlahBongkar = parseInt(match[0]);
+                        if (jumlahBongkar < 5) {
+                            window.location.href = "maintenance.html";
+                        } else {
+                            window.location.href = "success.html";
+                        }
+                    } else {
+                        window.location.href = "success.html";
+                    }
                 } else {
                     throw new Error("Gagal kirim");
                 }
             } catch (error) {
-                alert("Terjadi kesalahan saat mengirim laporan. Pastikan koneksi stabil.");
+                alert("Terjadi kesalahan saat mengirim laporan.");
+                document.getElementById('btnSubmit').disabled = false;
             } finally {
                 statusMsg.classList.add('hidden');
-                document.getElementById('btnSubmit').disabled = false;
             }
         }
     </script>
